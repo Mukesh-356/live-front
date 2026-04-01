@@ -14,7 +14,7 @@ interface LoginProps {}
 const Login: React.FC<LoginProps> = () => {
   const navigate = useNavigate();
 
-  const { setRole, refreshToken, role } = useAuth();
+  const { setRole, refreshToken } = useAuth();
 
   const [loginData, setLoginData] = useState({
     username: "",
@@ -46,17 +46,19 @@ const Login: React.FC<LoginProps> = () => {
     const response: any = await AuthenticationService.login(loginData);
 
     if (response.status && response.token) {
-      setSuccessStatus(true);
-      localStorage.setItem("token", response.token);
-      setRole(role);
-      refreshToken();
-
       const matchedRole =
         RoleList.find((r) => r.id === response.roleId) || null;
 
+      setSuccessStatus(true);
+      localStorage.setItem("token", response.token);
+      setRole(matchedRole);
+      refreshToken();
+
       setTimeout(() => {
         setSuccessStatus(false);
-        navigate(`/${String(matchedRole?.type)}/`);
+        if (matchedRole) {
+          navigate(`/${String(matchedRole.type)}/`);
+        }
       }, 1000);
     } else {
       setHandleError({
