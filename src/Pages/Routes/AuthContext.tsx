@@ -2,7 +2,7 @@ import type { FileData } from "@/Interfaces/CommonInterface";
 import { decrypt } from "@/lib/Helper";
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const RoleList = [
   { type: "admin", id: 1 },
@@ -45,7 +45,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [role, setRoleState] = useState<Role>(null);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const location = useLocation();
 
   const navigate = useNavigate();
 
@@ -62,7 +61,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         {
           headers: {
             Authorization: token,
-            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -85,13 +83,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           RoleList.find((r) => r.id === profile.refUserRTId) || null;
         setRole(matchedRole);
 
-        if (location.pathname === "/" || location.pathname === "/login") {
-          const matchedRole =
-            RoleList.find((r) => r.id === profile.refUserRTId) || null;
-          // setTimeout(() => {
-          navigate(`/${String(matchedRole?.type)}/`);
-          // }, 1000);
-        }
+        // Removed automatic redirection to allow manual login
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);

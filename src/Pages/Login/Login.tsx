@@ -4,14 +4,15 @@ import LoginBG1 from "@/assets/Images/LoginBG1.png";
 import TextInputWithLabel from "@/Components/Input/TextInputWithLabel";
 import ButtonsLabel from "@/Components/Buttons/ButtonsLabel";
 import Logo from "@/assets/Images/GreensTechLogo.png";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { RoleList } from "../Routes/AuthContext";
 import { AuthenticationService } from "@/Services/AuthenticationService";
 import { useAuth } from "../Routes/AuthContext";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const { setRole, refreshToken, role } = useAuth();
 
@@ -50,12 +51,12 @@ const Login: React.FC<LoginProps> = () => {
       setRole(role);
       refreshToken();
 
-      // const matchedRole =
-      //   RoleList.find((r) => r.id === response.roleId) || null;
+      const matchedRole =
+        RoleList.find((r) => r.id === response.roleId) || null;
 
       setTimeout(() => {
         setSuccessStatus(false);
-        // navigate(`/${String(matchedRole?.type)}/`);
+        navigate(`/${String(matchedRole?.type)}/`);
       }, 1000);
     } else {
       setHandleError({
